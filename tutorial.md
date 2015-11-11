@@ -2,7 +2,7 @@
 
 # 소개
 
-이 튜토리얼은 중급 레벨의 파이썬 지식을 필요로 합니다. 동시성에 대한 선수 지식은 필요하지 않습니다. 이 튜토리얼의 목적은 독자에게 gevent를 사용하기 위한 도구들을 소개하고, 독자가 가지고 있었던 동시성 문제를 해결하고 비동기 어플리케이션을 작성하는것을 돕는것 입니다.
+이 튜토리얼은 중급 레벨의 파이썬 지식을 필요로 합니다. 동시성에 대한 선수 지식은 필요하지 않습니다. 이 튜토리얼의 목적은 독자에게 gevent를 사용하기 위한 도구들을 소개하고, 독자가 가지고 있었던 동시성 문제를 해결하고 비동기 어플리케이션을 작성하는 것을 돕는 것 입니다.
 
 ### Contributors
 
@@ -43,13 +43,13 @@ gevent 튜토리얼을 쓰는데 도움을 주신 Denis Bilenko에게 감사의 
 
 이 문서는 MIT license로 공개된 협업 문서입니다. 추가할 내용이나 오타를 발견하신 경우 [Github](https://github.com/sdiehl/gevent-tutorial)로 pull request를 보내주세요. 
 
-한글 번역 오타 및 오역 수정은 [Github](https://github.com/leekchan/gevent-tutorial-ko)에 issue 생성 또는 pull request 부탁드립니다.
+한글 번역 오타 및 오역 수정은 [한글 번역 repository](https://github.com/leekchan/gevent-tutorial-ko)에 issue 생성 또는 pull request 부탁드립니다.
 
 이 페이지는
 [일본어](http://methane.github.com/gevent-tutorial-ja),
 [중국어](http://xlambda.com/gevent-tutorial/),
 [스페인어](http://ovnicraft.github.io/gevent/),
-[이탈리아어](http://pbertera.github.io/gevent-tutorial-it/) and
+[이탈리아어](http://pbertera.github.io/gevent-tutorial-it/), 그리고
 [독일어](https://hellerve.github.io/gevent-tutorial-de)
 로도 번역되어 있습니다.
 
@@ -130,7 +130,7 @@ gevent.joinall([
 ]]]
 [[[end]]]
 
-아래 코드는 *non-deterministic*(i.e. 같은 입력에 대해 같은 결과를 보장하지 않음)한 ``task`` 함수를 정의하는 또 다른 인위적인 예제입니다. 이 함수 실행의 부작용은 task가 무작위 시간동안 실행되고 일시중지되는 것 입니다.
+아래 코드는 *non-deterministic*(i.e. 같은 입력에 대해 같은 결과를 보장하지 않음)한 ``task`` 함수를 정의하는 또 다른 인위적인 예제입니다. 이 함수 실행의 부작용은 task가 무작위 시간 동안 실행되고 일시중지되는 것입니다.
 
 [[[cog
 import gevent
@@ -163,9 +163,9 @@ asynchronous()
 
 이 프로그램에서 중요한 부분은 greentlet 쓰레드 안에서 주어진 함수를 감싸고 있는 ``gevent.spawn``입니다. 초기화된 greenlet들은 ``threads`` 배열안에 담겨서 ``gevent.joinall``로 넘겨집니다. 이때, ``gevent.joinall``은 모든 넘겨진 greenlet들이 실행될때 까지 block되어 있습니다. 이 greenlet들이 완전히 종료되고 나면 다음 코드가 실행됩니다.
 
-주목해야할 중요한 사실은 비동기(asynchronous)처리시 실행 순서가 보장되지 않고 실행시간이 동기(synchronous)처리시보다 훨씬 줄어든다는 점입니다. 실제로 동기(synchronous)처리 예제를 완료하는데 걸리는 최대 시간은 각 task가 0.002초 동안 일시중지 될때 모두 실행되는데 0.02초입니다. 비동기(asynchronous)처리 예제에서는 task들이 서로 실행을 block하지 않으므로 최대 실행 시간이 약 0.002초입니다.
+주목해야할 중요한 사실은 비동기(asynchronous)처리시 실행 순서가 보장되지 않고 실행시간이 동기(synchronous)처리시보다 훨씬 줄어든다는 점입니다. 실제로 동기(synchronous)처리 예제를 완료하는 데 걸리는 최대 시간은 각 task가 0.002초 동안 일시중지 될 때 모두 실행되는데 0.02초입니다. 비동기(asynchronous)처리 예제에서는 task들이 서로 실행을 block하지 않으므로 최대 실행 시간이 약 0.002초입니다.
 
-더 일반적인 예시로, 서버에서 비동기로 데이터들을 가져올때, ``fetch()`` 함수의 실행 시간이 서버의 부하상황에 따라 달라지는 경우가 있을 수 있습니다.
+더 일반적인 예시로, 서버에서 비동기로 데이터들을 가져올 때, ``fetch()`` 함수의 실행 시간이 서버의 부하 상황에 따라 달라지는 경우가 있을 수 있습니다.
 
 <pre><code class="python">import gevent.monkey
 gevent.monkey.patch_socket()
@@ -203,7 +203,7 @@ asynchronous()
 
 ## Determinism
 
-이전에 언급한것 처럼, greenlet은 deterministic 합니다. 같은 greenlet 세팅과 같은 입력이 주어졌을때, 언제나 같은 결과를 출력합니다. 예시로, task를 multiprocessing pool에서 나누어 실행시켜 보고 결과를 gevent pool에서 실행시켰을때와 비교해 보겠습니다.
+이전에 언급한 것처럼, greenlet은 deterministic 합니다. 같은 greenlet 세팅과 같은 입력이 주어졌을때, 언제나 같은 결과를 출력합니다. 예시로, task를 multiprocessing pool에서 나누어 실행시켜 보고 결과를 gevent pool에서 실행시켰을 때와 비교해 보겠습니다.
 
 <pre>
 <code class="python">
@@ -244,16 +244,16 @@ print(run1 == run2 == run3 == run4)
 True</code>
 </pre>
 
-gevent가 일반적으로 deterministic 하다고 해도, 소켓과 파일같은 외부 서비스와 연동할때 non-deterministic한 입력들이 들어올 수 있습니다. 그러므로 green 쓰레드가 "deterministic
-concurrency" 형태라고 해도, POSIX 쓰레드들과 프로세스들을 다룰때 만나는 문제들을 경험할 수 있습니다.
+gevent가 일반적으로 deterministic 하다고 해도, 소켓과 파일과 같은 외부 서비스와 연동할 때 non-deterministic한 입력들이 들어올 수 있습니다. 그러므로 green 쓰레드가 "deterministic
+concurrency" 형태라고 해도, POSIX 쓰레드들과 프로세스들을 다룰 때 만나는 문제들을 경험할 수 있습니다.
 
-동시성을 다룰때 만날 수 있는 문제로 *race condition*이 있습니다. 간단히 요약하자면, race condition은 두 개의 동시에 실행되는 쓰레드나 프로세스들이 같은 공유 자원을 수정하려고 할때 발생합니다. 이 때 해당 공유자원의 결과 값은 실행 순서에 따라 달라지게 됩니다. 이런 결과는 non-deterministic한 프로그램 동작을 야기하기 때문에 발생시키지 않기 위해 노력해야 합니다. 
+동시성을 다룰 때 만날 수 있는 문제로 *race condition*이 있습니다. 간단히 요약하자면, race condition은 두 개의 동시에 실행되는 쓰레드나 프로세스들이 같은 공유 자원을 수정하려고 할 때 발생합니다. 이때 해당 공유자원의 결과 값은 실행 순서에 따라 달라지게 됩니다. 이런 결과는 non-deterministic한 프로그램 동작을 야기하기 때문에 발생시키지 않기 위해 노력해야 합니다. 
 
-가장 좋은 접근법은 공유 자원을 사용하지 않는것 입니다. 공유자원을 잘못 사용하면 부작용이 엄청나니 주의해야 합니다!
+가장 좋은 접근법은 공유 자원을 사용하지 않는 것입니다. 공유자원을 잘못 사용하면 부작용이 엄청나니 주의해야 합니다!
 
 ## Spawning Greenlets
 
-gevent는 greenlet 초기화를 위한 몇가지 wrapper들을 제공합니다. 
+gevent는 greenlet 초기화를 위한 몇 가지 wrapper들을 제공합니다. 
 일반적인 패턴은 다음과 같습니다:
 
 [[[cog
@@ -312,7 +312,7 @@ g.join()
 
 ## Greenlet State
 
-다른 코드 예시들 처럼, greenlet도 다양한 경우에 실패할 수 있습니다. greenlet은 예외를 발생시키는것이 실패하거나, 정지에 실패할 수 도 있고, 시스템 자원을 과도하게 사용할 수 도 있습니다.
+다른 코드 예시들처럼, greenlet도 다양한 경우에 실패할 수 있습니다. greenlet은 예외를 발생시키는것이 실패하거나, 정지에 실패할 수도 있고, 시스템 자원을 과도하게 사용할 수도 있습니다.
 
 greenlet의 내부 상태는 대체로 time-dependent합니다. greenlet에는 쓰레드의 상태를 모니터링 할 수 있는 다양한 flag들이 있습니다:
 
@@ -369,7 +369,7 @@ print(loser.exception)
 
 메인 프로그램이 SIGQUIT 시그널을 받은 시점에 yield를 실패한 Greenlet은 예상보다 오래 실행이 정지되어 있을 수 있습니다. 이런 프로세스는 "좀비 프로세스"라고 불리고, 파이썬 인터프리터 외부에서 kill되어야 합니다.
 
-일반적인 패턴은 메인 프로그램에서 SIGQUIT 시그널에 대기하고 있다가 프로그램이 종료되기 전에 ``gevent.shutdown`` 호출하는 것 입니다.
+일반적인 패턴은 메인 프로그램에서 SIGQUIT 시그널에 대기하고 있다가 프로그램이 종료되기 전에 ``gevent.shutdown`` 호출하는 것입니다.
 
 <pre>
 <code class="python">import gevent
@@ -387,7 +387,7 @@ if __name__ == '__main__':
 
 ## Timeouts
 
-타임아웃은 코드 블럭이나 Greenlet의 실행시간에 제한을 주는 것 입닏.
+타임아웃은 코드 블럭이나 Greenlet의 실행시간에 제한을 주는 것입니다.
 
 <pre>
 <code class="python">
@@ -465,7 +465,7 @@ except Timeout:
 
 ## Monkeypatching
 
-유감스럽게도 gevent의 어두운 면을 보게 되었습니다. 지금까지 강력한 코루틴 패턴들을 사용해보기 위해 monkey patching에 대해 언급하지 않았었는데요, monkey patching의 어두운 면에 대해 언급할 때가 되었습니다. 위에서 ``monkey.patch_socket()``를 사용했던것을 눈치채셨는지 모르겠는데요, 이 명령은 파이썬 기본 소켓 라이브러리를 수정하여 부작용을 유발할 수 있는 명령입니다.
+유감스럽게도 gevent의 어두운 면을 보게 되었습니다. 지금까지 강력한 코루틴 패턴들을 사용해보기 위해 monkey patching에 대해 언급하지 않았었는데요, monkey patching의 어두운 면에 대해 언급할 때가 되었습니다. 위에서 ``monkey.patch_socket()``를 사용했던 것을 눈치채셨는지 모르겠는데요, 이 명령은 파이썬 기본 소켓 라이브러리를 수정하여 부작용을 유발할 수 있는 명령입니다.
 
 <pre>
 <code class="python">import socket
@@ -495,7 +495,7 @@ function select at 0x1924de8
 </code>
 </pre>
 
-파이썬은 런타임에 모듈, 클래스, 심지어 함수까지도 수정하는것을 허용합니다. 이는 문제가 발생했을 때 디버깅을 매우 어렵게 만드는 "암시적인 부작용"을 유발할 수 있는 안좋은 생각입니다. 그럼에도 불구하고, monkey patching은 라이브러리가 파이썬의 기본 동작을 변경해야 하는 극단적인 상황에서 사용될 수 있습니다. monkey patching덕분에 gevent는 ``socket``, ``ssl``, ``threading``, 그리고 ``select`` 과 같은 기본 라이브러리들에 있는 blocking system call들이 동시에 실행될 수 있도록 수정할 수 있습니다.
+파이썬은 런타임에 모듈, 클래스, 심지어 함수까지도 수정하는 것을 허용합니다. 이는 문제가 발생했을 때 디버깅을 매우 어렵게 만드는 "암시적인 부작용"을 유발할 수 있는 안좋은 생각입니다. 그럼에도 불구하고, monkey patching은 라이브러리가 파이썬의 기본 동작을 변경해야 하는 극단적인 상황에서 사용될 수 있습니다. monkey patching덕분에 gevent는 ``socket``, ``ssl``, ``threading``, 그리고 ``select`` 과 같은 기본 라이브러리들에 있는 blocking system call들이 동시에 실행될 수 있도록 수정할 수 있습니다.
 
 예를 들어, Redis 파이썬 바인딩은 Redis 서버와 통신하기 위해 기본 tcp 소켓을 합니다. ``gevent.monkey.patch_all()``를 실행시키는 것 만으로 Redis 바인딩이 요청들을 동시에 실행될 수 있도록 스케쥴링 되도록 만들고 gevent 코드에서 동작하도록 만들 수 있습니다.
 
@@ -610,12 +610,11 @@ gevent.joinall([
 ]]]
 [[[end]]]
 
-또한 Queue는 ``put``이나 ``get`` 연산시 block 됩니다. 
+또한 Queue는 ``put``이나 ``get`` 연산 시 block 됩니다. 
 
 non-blocking 연산이 필요할 때는 block이 되지 않는 ``put_nowait``과 ``get_nowait`을 사용할 수 있습니다. 대신 연산이 불가능 할때는 ``gevent.queue.Empty`` 나 ``gevent.queue.Full`` 예외를 발생시킵니다.
-Queues can also block on either ``put`` or ``get`` as the need arises.
 
-아래 코드는 상사가 3명의 작업자(steve, john, nancy)에게 동시에 일을 시키는데 Queue가 3개 이상의 요소를 담지 않도록 제한하는 예시입니다. 이 제한은 ``put``연산이 Queue에 남은 공간이 있을때 까지 block 되어야 함을 의미합니다. 반대로 ``get`` 연산은 Queue에 요소가 없으면 block 되는데, 일정 시간이 지날 때 까지 요소가 들어오지 않으면 ``gevent.queue.Empty`` 예외를 발생시키면서 종료될 수 있도록 타임아웃 파라미터를 설정할 수 있습니다.
+아래 코드는 상사가 3명의 작업자(steve, john, nancy)에게 동시에 일을 시키는데 Queue가 3개 이상의 요소를 담지 않도록 제한하는 예시입니다. 이 제한은 ``put``연산이 Queue에 남은 공간이 있을 때 까지 block 되어야 함을 의미합니다. 반대로 ``get`` 연산은 Queue에 요소가 없으면 block 되는데, 일정 시간이 지날 때 까지 요소가 들어오지 않으면 ``gevent.queue.Empty`` 예외를 발생시키면서 종료될 수 있도록 타임아웃 파라미터를 설정할 수 있습니다.
 
 [[[cog
 import gevent
@@ -657,7 +656,7 @@ gevent.joinall([
 
 ## Groups and Pools
 
-Group은 동시에 관리되고 스케쥴링 되는 실행중인 Greenlet들의 집합입니다. 
+Group은 동시에 관리되고 스케쥴링 되는 실행 중인 Greenlet들의 집합입니다. 
 
 [[[cog
 import gevent
@@ -681,7 +680,7 @@ group.join()
 ]]]
 [[[end]]]
 
-Group은 비동기 task 집합들을 관리하는데 굉장히 유용합니다.
+Group은 비동기 task 집합들을 관리하는 데 굉장히 유용합니다.
 
 ``Group``은 작업들을 Greenlet집합에서 실행시키고 결과들을 다양한 방법을 통해 수집할 수 있습니다.
 
@@ -718,7 +717,7 @@ for i in igroup.imap_unordered(intensive, xrange(3)):
 ]]]
 [[[end]]]
 
-Pool은 동시에 제한된 개수의 Greenlet을 실행 시킬 수 있도록 해줍니다. Pool은 대량의 네트워크 또는 IO bound 작업들을 동시에 실행하는 경우에 유용합니다.
+Pool은 동시에 제한된 개수의 Greenlet을 실행시킬 수 있도록 해줍니다. Pool은 대량의 네트워크 또는 IO bound 작업들을 동시에 실행하는 경우에 유용합니다.
 
 [[[cog
 import gevent
@@ -762,7 +761,7 @@ class SocketPool(object):
 
 ## Locks and Semaphores
 
-Semaphore는 Greenlet들이 동시에 접근하거나 실행되는것을 제한하는 저수준의 synchronization primitive입니다. Semaphore는 ``acquire``와 ``release``라는 함수를 가지고 있습니다. Semaphore가 acquire 되거나 release되는 숫자의 차이는 Semaphore bound라고 불립니다. Semaphore bound가 0에 도달하면 다른 Greenlet이 release 할 때 까지 block 됩니다.
+Semaphore는 Greenlet들이 동시에 접근하거나 실행되는 것을 제한하는 저수준의 synchronization primitive입니다. Semaphore는 ``acquire``와 ``release``라는 함수를 가지고 있습니다. Semaphore가 acquire 되거나 release되는 숫자의 차이는 Semaphore bound라고 불립니다. Semaphore bound가 0에 도달하면 다른 Greenlet이 release 할 때까지 block 됩니다.
 
 [[[cog
 from gevent import sleep
@@ -790,7 +789,7 @@ pool.map(worker2, xrange(3,6))
 ]]]
 [[[end]]]
 
-Semaphore bound가 1인 경우를 Lock이라고 합니다. Lock은 Greenlet이 하나만 실행되는 것을 보장합니다. Lock은 자원이 한번에 하나의 Greenlet에 의해서만 사용되는 것을 보장하여야 할 때 사용됩니다.
+Semaphore bound가 1인 경우를 Lock이라고 합니다. Lock은 Greenlet이 하나만 실행되는 것을 보장합니다. Lock은 자원이 한 번에 하나의 Greenlet에 의해서만 사용되는 것을 보장하여야 할 때 사용됩니다.
 
 ## Thread Locals
 
@@ -897,7 +896,7 @@ Linux
 <code>
 </pre>
 
-또한 많은 사람들이  ``gevent``와 ``multiprocessing``를 동시에 사용하고 싶어합니다. ``multiprocessing``에서 제공되는 프로세스간 통신은 기본적으로 cooperative하지 않습니다. (예륻 들어, ``Pipe``와 같은) ``multiprocessing.Connection``를 기반으로 한 오브젝트들은 내부의 file descriptor를 노출하기 때문에, 실제로 reading/writing을 하기 전에 ready-to-read/ready-to-write 이벤트에 대기(cooperatively wait)하기 위해 ``gevent.socket.wait_read``와 ``wait_write``를 사용할 수 있습니다.
+또한 많은 사람들이  ``gevent``와 ``multiprocessing``를 동시에 사용하고 싶어 합니다. ``multiprocessing``에서 제공되는 프로세스 간 통신은 기본적으로 cooperative하지 않습니다. (예륻 들어, ``Pipe``와 같은) ``multiprocessing.Connection``를 기반으로 한 오브젝트들은 내부의 file descriptor를 노출하기 때문에, 실제로 reading/writing을 하기 전에 ready-to-read/ready-to-write 이벤트에 대기(cooperatively wait)하기 위해 ``gevent.socket.wait_read``와 ``wait_write``를 사용할 수 있습니다.
 
 <pre>
 <code class="python">
@@ -939,14 +938,14 @@ if __name__ == '__main__':
 하지만, ``multiprocessing``과 gevent를 함께 사용하면 OS와 관련된 문제들을 야기할 수 있습니다:
 
 * POSIX호홤 시스템에서 [forking](http://linux.die.net/man/2/fork)후에는 자식 프로세스에서 gevent의 상태는 ill-posed상태입니다. 부작용은 ``multiprocessing.Process`` 생성 작업이 부모와 자식 프로세스에서 모두 되기 전에 Greenlet들이 생성되는것 입니다.
-* ``put_msg()``함수 안에서 ``a.send()``를 호출하면 thread 호출을 block시킬 수 있습니다: ready-to-write 이벤트는 오직 1byte를 쓰는것만 보장합니다. 쓰기 시도가 완료되기 전에 이미 내부 버퍼가 가득찼을 수 도 있습니다.
+* ``put_msg()``함수 안에서 ``a.send()``를 호출하면 thread 호출을 block시킬 수 있습니다: ready-to-write 이벤트는 오직 1byte를 쓰는것만 보장합니다. 쓰기 시도가 완료되기 전에 이미 내부 버퍼가 가득 찼을 수도 있습니다.
 * ``wait_write()`` / ``wait_read()`` 기반 접근은 윈도우에서는 동작하지 않습니다. (``IOError: 3 is not a socket (files are not supported)``) 윈도우는 pipe 이벤트를 감지할 수 없기 때문입니다.
 
 파이썬 패키지 [gipc](http://pypi.python.org/pypi/gipc)은 POSIX 호환 시스템과 윈도우 시스템 양쪽에서 모두 투명하게 동작하는 시스템을 만들 수 있도록 해줍니다. gipc는 gevent와 호환되는 ``multiprocessing.Process``기반 자식 프로세스와 파이프에 기반한 gevent 호환 프로세스간 통신을 지원합니다.
 
 ## Actors
 
-Actor 모델은 Erlang에 의해서 대중화된 고수준의 동시성 모델입니다. 핵심 개념을 요약하자면 서로 메시지를 주고받을 수 있는 독립된 Actor들의 집합을 사용할 수 있는것 입니다. Actor 안에 있는 메인 루프는 메시지들을 반복적으로 살펴보면서 해당 메시지의 명령들을 실행합니다.
+Actor 모델은 Erlang에 의해서 대중화된 고수준의 동시성 모델입니다. 핵심 개념을 요약하자면 서로 메시지를 주고받을 수 있는 독립된 Actor들의 집합을 사용할 수 있는 것 입니다. Actor 안에 있는 메인 루프는 메시지들을 반복적으로 살펴보면서 해당 메시지의 명령들을 실행합니다.
 
 Gevent는 primitive Actor 타입을 지원하지는 않지만, Greenlet을 상속한 클래스 안에서 Queue를 사용하여 간단하게 구현해볼 수 있습니다.
 
@@ -1088,7 +1087,7 @@ gevent 1.0.x 버전에서는 HTTP 서버가 내장되어 있지 않습니다. �
 
 **gevent 1.0.x를 사용한다면, 이 섹션은 해당되지 않습니다**
 
-streaming HTTP 서비스에 대해서 설명하자면, 핵심 개념은 헤더에서 컨텐츠의 길이를 명시하지 않는것 입니다. 대신에 커넥션을 열어둔 상태에서 파이프에 담긴 chunk들을 flush 합니다. 이 때 각 chunk의 길이를 알려주는 hex digit을 chunk앞에 붙입니다. 스트림은 길이가 0인 chunk가 전달되면 종료됩니다.
+streaming HTTP 서비스에 대해서 설명하자면, 핵심 개념은 헤더에서 컨텐츠의 길이를 명시하지 않는 것 입니다. 대신에 커넥션을 열어둔 상태에서 파이프에 담긴 chunk들을 flush 합니다. 이때 각 chunk의 길이를 알려주는 hex digit을 chunk앞에 붙입니다. 스트림은 길이가 0인 chunk가 전달되면 종료됩니다.
 
     HTTP/1.1 200 OK
     Content-Type: text/plain
@@ -1259,7 +1258,7 @@ HTML Page:
 
 ## Chat Server
 
-마지막 예제는, 실시간 채팅방 입니다. 이 예제는 <a href="http://flask.pocoo.org/">Flask</a>를 필요로 합니다 (Django, Pyramid 등 다른 프레임워크를 사용해도 됩니다). 관련된 Javascript와 HTML 파일들은 <a href="https://github.com/sdiehl/minichat">을 참조하세요.
+마지막 예제는, 실시간 채팅방입니다. 이 예제는 <a href="http://flask.pocoo.org/">Flask</a>를 필요로 합니다 (Django, Pyramid 등 다른 프레임워크를 사용해도 됩니다). 관련된 Javascript와 HTML 파일들은 <a href="https://github.com/sdiehl/minichat">을 참조하세요.
 
 
 <pre>
