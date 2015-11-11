@@ -1258,7 +1258,7 @@ HTML Page:
 
 ## Chat Server
 
-마지막 예제는, 실시간 채팅방입니다. 이 예제는 <a href="http://flask.pocoo.org/">Flask</a>를 필요로 합니다 (Django, Pyramid 등 다른 프레임워크를 사용해도 됩니다). 관련된 Javascript와 HTML 파일들은 <a href="https://github.com/sdiehl/minichat">을 참조하세요.
+마지막 예제는, 실시간 채팅방입니다. 이 예제는 <a href="http://flask.pocoo.org/">Flask</a>를 필요로 합니다 (Django, Pyramid 등 다른 프레임워크를 사용해도 됩니다). 관련된 Javascript와 HTML 파일들은 <a href="https://github.com/sdiehl/minichat">링크</a>를 참조하세요.
 
 
 <pre>

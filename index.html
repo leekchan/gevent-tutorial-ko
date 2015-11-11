@@ -247,15 +247,15 @@ Task 8 done
 Task 9 done
 Asynchronous:
 Task 1 done
-Task 8 done
-Task 9 done
 Task 2 done
-Task 6 done
-Task 0 done
 Task 3 done
+Task 6 done
+Task 7 done
+Task 0 done
 Task 4 done
 Task 5 done
-Task 7 done
+Task 8 done
+Task 9 done
 </pre></code></p>
 <p>동기(synchronous)처리시 모든 task들이 순차적으로 실행되고, 다른 task들이 각각 동작하는 동안 <em>blocking</em>(i.e. 프로그램의 동작을 일시중지함.)방식으로 동작합니다. </p>
 <p>이 프로그램에서 중요한 부분은 greentlet 쓰레드 안에서 주어진 함수를 감싸고 있는 <code>gevent.spawn</code>입니다. 초기화된 greenlet들은 <code>threads</code> 배열안에 담겨서 <code>gevent.joinall</code>로 넘겨집니다. 이때, <code>gevent.joinall</code>은 모든 넘겨진 greenlet들이 실행될때 까지 block되어 있습니다. 이 greenlet들이 완전히 종료되고 나면 다음 코드가 실행됩니다.</p>
@@ -862,11 +862,11 @@ for i in igroup.imap_unordered(intensive, xrange(3)):
 <p></code>
 <pre><code class="python">
 Size of group 3
-Hello from Greenlet 4398888592
+Hello from Greenlet 4526265840
 Size of group 3
-Hello from Greenlet 4398888272
+Hello from Greenlet 4526265680
 Size of group 3
-Hello from Greenlet 4398890512
+Hello from Greenlet 4526267920
 Ordered
 ('task', 0)
 ('task', 1)
@@ -1418,7 +1418,7 @@ server.serve_forever()
 &lt;/html&gt;
 </code></pre>
 <h2 id="chat-server">Chat Server</h2>
-<p>마지막 예제는, 실시간 채팅방입니다. 이 예제는 <a href="http://flask.pocoo.org/">Flask</a>를 필요로 합니다 (Django, Pyramid 등 다른 프레임워크를 사용해도 됩니다). 관련된 Javascript와 HTML 파일들은 <a href="https://github.com/sdiehl/minichat">을 참조하세요.</p>
+<p>마지막 예제는, 실시간 채팅방입니다. 이 예제는 <a href="http://flask.pocoo.org/">Flask</a>를 필요로 합니다 (Django, Pyramid 등 다른 프레임워크를 사용해도 됩니다). 관련된 Javascript와 HTML 파일들은 <a href="https://github.com/sdiehl/minichat">링크</a>를 참조하세요.</p>
 <pre>
 <code class="python"># Micro gevent chatroom.
 # ----------------------
