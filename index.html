@@ -45,7 +45,7 @@
 
     <div class="toc">
 <ul>
-<li><a href="#">소개</a><ul>
+<li><a href="#introduction">Introduction</a><ul>
 <li><a href="#contributors">Contributors</a></li>
 </ul>
 </li>
@@ -82,7 +82,7 @@
 </li>
 </ul>
 </div>
-<h1 id="">소개</h1>
+<h1 id="introduction">Introduction</h1>
 <p>이 튜토리얼은 중급 레벨의 파이썬 지식을 필요로 합니다. 동시성에 대한 선수 지식은 필요하지 않습니다. 이 튜토리얼의 목적은 독자에게 gevent를 사용하기 위한 도구들을 소개하고, 독자가 가지고 있었던 동시성 문제를 해결하고 비동기 어플리케이션을 작성하는 것을 돕는 것 입니다.</p>
 <h3 id="contributors">Contributors</h3>
 <p>컨트리뷰터 리스트:
@@ -246,16 +246,16 @@ Task 7 done
 Task 8 done
 Task 9 done
 Asynchronous:
-Task 0 done
+Task 1 done
+Task 8 done
+Task 9 done
 Task 2 done
+Task 6 done
+Task 0 done
+Task 3 done
+Task 4 done
 Task 5 done
 Task 7 done
-Task 9 done
-Task 3 done
-Task 8 done
-Task 1 done
-Task 4 done
-Task 6 done
 </pre></code></p>
 <p>동기(synchronous)처리시 모든 task들이 순차적으로 실행되고, 다른 task들이 각각 동작하는 동안 <em>blocking</em>(i.e. 프로그램의 동작을 일시중지함.)방식으로 동작합니다. </p>
 <p>이 프로그램에서 중요한 부분은 greentlet 쓰레드 안에서 주어진 함수를 감싸고 있는 <code>gevent.spawn</code>입니다. 초기화된 greenlet들은 <code>threads</code> 배열안에 담겨서 <code>gevent.joinall</code>로 넘겨집니다. 이때, <code>gevent.joinall</code>은 모든 넘겨진 greenlet들이 실행될때 까지 block되어 있습니다. 이 greenlet들이 완전히 종료되고 나면 다음 코드가 실행됩니다.</p>
@@ -862,11 +862,11 @@ for i in igroup.imap_unordered(intensive, xrange(3)):
 <p></code>
 <pre><code class="python">
 Size of group 3
-Hello from Greenlet 4337256080
+Hello from Greenlet 4398888592
 Size of group 3
-Hello from Greenlet 4337255760
+Hello from Greenlet 4398888272
 Size of group 3
-Hello from Greenlet 4337258000
+Hello from Greenlet 4398890512
 Ordered
 ('task', 0)
 ('task', 1)
