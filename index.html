@@ -125,8 +125,7 @@
 <a href="http://xlambda.com/gevent-tutorial/">중국어</a>,
 <a href="http://ovnicraft.github.io/gevent/">스페인어</a>,
 <a href="http://pbertera.github.io/gevent-tutorial-it/">이탈리아어</a>, 그리고
-<a href="https://hellerve.github.io/gevent-tutorial-de">독일어</a>
-로도 번역되어 있습니다.</p>
+<a href="https://hellerve.github.io/gevent-tutorial-de">독일어</a>로도 번역되어 있습니다.</p>
 <h1 id="core">Core</h1>
 <h2 id="greenlets">Greenlets</h2>
 <p>gevent에서 사용되는 주된 패턴은 <strong>Greenlet</strong>입니다. Greenlet은 C 확장 모듈 형태로 제공되는 경량 코루틴 입니다. Greenlet들은 메인 프로그램을 실행하는 OS process 안에서 모두 실행되지만 상호작용하며 스케줄링됩니다.</p>
@@ -247,19 +246,19 @@ Task 8 done
 Task 9 done
 Asynchronous:
 Task 1 done
+Task 4 done
+Task 6 done
+Task 9 done
+Task 0 done
 Task 2 done
 Task 3 done
-Task 6 done
 Task 7 done
-Task 0 done
-Task 4 done
-Task 5 done
 Task 8 done
-Task 9 done
+Task 5 done
 </pre></code></p>
 <p>동기(synchronous)처리시 모든 task들이 순차적으로 실행되고, 다른 task들이 각각 동작하는 동안 <em>blocking</em>(i.e. 프로그램의 동작을 일시중지함.)방식으로 동작합니다. </p>
 <p>이 프로그램에서 중요한 부분은 greentlet 쓰레드 안에서 주어진 함수를 감싸고 있는 <code>gevent.spawn</code>입니다. 초기화된 greenlet들은 <code>threads</code> 배열안에 담겨서 <code>gevent.joinall</code>로 넘겨집니다. 이때, <code>gevent.joinall</code>은 모든 넘겨진 greenlet들이 실행될때 까지 block되어 있습니다. 이 greenlet들이 완전히 종료되고 나면 다음 코드가 실행됩니다.</p>
-<p>주목해야할 중요한 사실은 비동기(asynchronous)처리시 실행 순서가 보장되지 않고 실행시간이 동기(synchronous)처리시보다 훨씬 줄어든다는 점입니다. 실제로 동기(synchronous)처리 예제를 완료하는 데 걸리는 최대 시간은 각 task가 0.002초 동안 일시중지 될 때 모두 실행되는데 0.02초입니다. 비동기(asynchronous)처리 예제에서는 task들이 서로 실행을 block하지 않으므로 최대 실행 시간이 약 0.002초입니다.</p>
+<p>주목해야 할 중요한 사실은 비동기(asynchronous)처리 시 실행 순서가 보장되지 않고 실행시간이 동기(synchronous)처리 시보다 훨씬 줄어든다는 점입니다. 실제로 동기(synchronous)처리 예제를 완료하는 데 걸리는 최대 시간은 각 task가 0.002초 동안 일시중지 될 때 모두 실행되는데 0.02초입니다. 비동기(asynchronous)처리 예제에서는 task들이 서로 실행을 block 하지 않으므로 최대 실행 시간이 약 0.002초입니다.</p>
 <p>더 일반적인 예시로, 서버에서 비동기로 데이터들을 가져올 때, <code>fetch()</code> 함수의 실행 시간이 서버의 부하 상황에 따라 달라지는 경우가 있을 수 있습니다.</p>
 <pre><code class="python">import gevent.monkey
 gevent.monkey.patch_socket()
@@ -592,7 +591,7 @@ function select at 0x1924de8
 </code>
 </pre>
 
-<p>파이썬은 런타임에 모듈, 클래스, 심지어 함수까지도 수정하는 것을 허용합니다. 이는 문제가 발생했을 때 디버깅을 매우 어렵게 만드는 "암시적인 부작용"을 유발할 수 있는 안좋은 생각입니다. 그럼에도 불구하고, monkey patching은 라이브러리가 파이썬의 기본 동작을 변경해야 하는 극단적인 상황에서 사용될 수 있습니다. monkey patching덕분에 gevent는 <code>socket</code>, <code>ssl</code>, <code>threading</code>, 그리고 <code>select</code> 과 같은 기본 라이브러리들에 있는 blocking system call들이 동시에 실행될 수 있도록 수정할 수 있습니다.</p>
+<p>파이썬은 런타임에 모듈, 클래스, 심지어 함수까지도 수정하는 것을 허용합니다. 이는 문제가 발생했을 때 디버깅을 매우 어렵게 만드는 "암시적인 부작용"을 유발할 수 있는 안 좋은 생각입니다. 그럼에도 불구하고, monkey patching은 라이브러리가 파이썬의 기본 동작을 변경해야 하는 극단적인 상황에서 사용될 수 있습니다. monkey patching덕분에 gevent는 <code>socket</code>, <code>ssl</code>, <code>threading</code>, 그리고 <code>select</code> 과 같은 기본 라이브러리들에 있는 blocking system call들이 동시에 실행될 수 있도록 수정할 수 있습니다.</p>
 <p>예를 들어, Redis 파이썬 바인딩은 Redis 서버와 통신하기 위해 기본 tcp 소켓을 합니다. <code>gevent.monkey.patch_all()</code>를 실행시키는 것 만으로 Redis 바인딩이 요청들을 동시에 실행될 수 있도록 스케쥴링 되도록 만들고 gevent 코드에서 동작하도록 만들 수 있습니다.</p>
 <p>이는 별도의 코드 작성 없이도 라이브러리들을 연동하는 것을 가능하게 합니다. monkey patching은 여전히 악이지만, 이 경우에는 "필요악"입니다.</p>
 <h1 id="data-structures">Data Structures</h1>
@@ -665,7 +664,7 @@ gevent.joinall([
 </pre>
 
 <h2 id="queues">Queues</h2>
-<p>Queue는 일반적인 <code>put</code> 과 <code>`get</code> 연산을 지원하지만 Greenlet 사이에서 안전하게 조작되는 것이 보장되는 순서를 가진 데이터들의 집합입니다.</p>
+<p>Queue는 일반적인 <code>put</code> 과 <code>get</code> 연산을 지원하지만 Greenlet 사이에서 안전하게 조작되는 것이 보장되는 순서를 가진 데이터들의 집합입니다.</p>
 <p>예를 들어 한 Greenlet이 queue에서 값 하나를 가져왔을 때, 해당 값이 다른 Greenlet에 의해서 동시에 접근되지 못하도록 보장합니다.</p>
 <pre><code class="python">
 import gevent
@@ -725,7 +724,7 @@ Quitting time!
 Quitting time!
 </pre></code></p>
 <p>또한 Queue는 <code>put</code>이나 <code>get</code> 연산 시 block 됩니다. </p>
-<p>non-blocking 연산이 필요할 때는 block이 되지 않는 <code>put_nowait</code>과 <code>get_nowait`을 사용할 수 있습니다. 대신 연산이 불가능 할때는</code>gevent.queue.Empty<code>나</code>gevent.queue.Full`` 예외를 발생시킵니다.</p>
+<p>non-blocking 연산이 필요할 때는 block이 되지 않는 <code>put_nowait</code>과 <code>get_nowait</code>을 사용할 수 있습니다. 대신 연산이 불가능할 때는 <code>gevent.queue.Empty</code> 나 <code>gevent.queue.Full</code> 예외를 발생시킵니다.</p>
 <p>아래 코드는 상사가 3명의 작업자(steve, john, nancy)에게 동시에 일을 시키는데 Queue가 3개 이상의 요소를 담지 않도록 제한하는 예시입니다. 이 제한은 <code>put</code>연산이 Queue에 남은 공간이 있을 때 까지 block 되어야 함을 의미합니다. 반대로 <code>get</code> 연산은 Queue에 요소가 없으면 block 되는데, 일정 시간이 지날 때 까지 요소가 들어오지 않으면 <code>gevent.queue.Empty</code> 예외를 발생시키면서 종료될 수 있도록 타임아웃 파라미터를 설정할 수 있습니다.</p>
 <pre><code class="python">
 import gevent
@@ -862,11 +861,11 @@ for i in igroup.imap_unordered(intensive, xrange(3)):
 <p></code>
 <pre><code class="python">
 Size of group 3
-Hello from Greenlet 4526265840
+Hello from Greenlet 4464465552
 Size of group 3
-Hello from Greenlet 4526265680
+Hello from Greenlet 4464465232
 Size of group 3
-Hello from Greenlet 4526267920
+Hello from Greenlet 4464467472
 Ordered
 ('task', 0)
 ('task', 1)
@@ -1171,8 +1170,8 @@ gevent.joinall([ping, pong])
 <h1 id="real-world-applications">Real World Applications</h1>
 <h2 id="gevent-zeromq">Gevent ZeroMQ</h2>
 <p><a href="http://www.zeromq.org/">ZeroMQ</a>의 개발자는 ZeroMQ를 다음과 같이 정의합니다: "a socket library that acts as a concurrency framework". ZeroMQ는 동시성을 가진 분산시스템을 만들기 위한 강력한 messaging layer입니다.</p>
-<p>ZeroMQ는 다양한 socket primitive들을 제공합니다. socket은 blocking 연산인 <code>send</code>, <code>recv` 함수를 제공합니다. 하지만 [Travis Cline](https://github.com/traviscline)가 만든 라이브러리를 사용하면 gevent.socket을 이용해 ZeroMQ socket에 non-blocking 방식으로 접근할 수 있습니다. 다음 명령어로 PyPi에서 gevent-zeromq를 설치할 수 있습니다:</code>pip install
-gevent-zeromq``</p>
+<p>ZeroMQ는 다양한 socket primitive들을 제공합니다. socket은 blocking 연산인 <code>send</code>, <code>recv</code> 함수를 제공합니다. 하지만 <a href="http://github.com/traviscline">Travis Cline</a>가 만든 라이브러리를 사용하면 gevent.socket을 이용해 ZeroMQ socket에 non-blocking 방식으로 접근할 수 있습니다. 다음 명령어로 PyPi에서 gevent-zeromq를 설치할 수 있습니다: <code>pip install
+gevent-zeromq</code></p>
 <pre><code class="python">
 # Note: Remember to ``pip install pyzmq gevent_zeromq``
 import gevent

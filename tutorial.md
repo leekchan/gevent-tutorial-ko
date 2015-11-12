@@ -50,8 +50,7 @@ gevent 튜토리얼을 쓰는데 도움을 주신 Denis Bilenko에게 감사의 
 [중국어](http://xlambda.com/gevent-tutorial/),
 [스페인어](http://ovnicraft.github.io/gevent/),
 [이탈리아어](http://pbertera.github.io/gevent-tutorial-it/), 그리고
-[독일어](https://hellerve.github.io/gevent-tutorial-de)
-로도 번역되어 있습니다.
+[독일어](https://hellerve.github.io/gevent-tutorial-de)로도 번역되어 있습니다.
 
 # Core
 
@@ -163,7 +162,7 @@ asynchronous()
 
 이 프로그램에서 중요한 부분은 greentlet 쓰레드 안에서 주어진 함수를 감싸고 있는 ``gevent.spawn``입니다. 초기화된 greenlet들은 ``threads`` 배열안에 담겨서 ``gevent.joinall``로 넘겨집니다. 이때, ``gevent.joinall``은 모든 넘겨진 greenlet들이 실행될때 까지 block되어 있습니다. 이 greenlet들이 완전히 종료되고 나면 다음 코드가 실행됩니다.
 
-주목해야할 중요한 사실은 비동기(asynchronous)처리시 실행 순서가 보장되지 않고 실행시간이 동기(synchronous)처리시보다 훨씬 줄어든다는 점입니다. 실제로 동기(synchronous)처리 예제를 완료하는 데 걸리는 최대 시간은 각 task가 0.002초 동안 일시중지 될 때 모두 실행되는데 0.02초입니다. 비동기(asynchronous)처리 예제에서는 task들이 서로 실행을 block하지 않으므로 최대 실행 시간이 약 0.002초입니다.
+주목해야 할 중요한 사실은 비동기(asynchronous)처리 시 실행 순서가 보장되지 않고 실행시간이 동기(synchronous)처리 시보다 훨씬 줄어든다는 점입니다. 실제로 동기(synchronous)처리 예제를 완료하는 데 걸리는 최대 시간은 각 task가 0.002초 동안 일시중지 될 때 모두 실행되는데 0.02초입니다. 비동기(asynchronous)처리 예제에서는 task들이 서로 실행을 block 하지 않으므로 최대 실행 시간이 약 0.002초입니다.
 
 더 일반적인 예시로, 서버에서 비동기로 데이터들을 가져올 때, ``fetch()`` 함수의 실행 시간이 서버의 부하 상황에 따라 달라지는 경우가 있을 수 있습니다.
 
@@ -495,7 +494,7 @@ function select at 0x1924de8
 </code>
 </pre>
 
-파이썬은 런타임에 모듈, 클래스, 심지어 함수까지도 수정하는 것을 허용합니다. 이는 문제가 발생했을 때 디버깅을 매우 어렵게 만드는 "암시적인 부작용"을 유발할 수 있는 안좋은 생각입니다. 그럼에도 불구하고, monkey patching은 라이브러리가 파이썬의 기본 동작을 변경해야 하는 극단적인 상황에서 사용될 수 있습니다. monkey patching덕분에 gevent는 ``socket``, ``ssl``, ``threading``, 그리고 ``select`` 과 같은 기본 라이브러리들에 있는 blocking system call들이 동시에 실행될 수 있도록 수정할 수 있습니다.
+파이썬은 런타임에 모듈, 클래스, 심지어 함수까지도 수정하는 것을 허용합니다. 이는 문제가 발생했을 때 디버깅을 매우 어렵게 만드는 "암시적인 부작용"을 유발할 수 있는 안 좋은 생각입니다. 그럼에도 불구하고, monkey patching은 라이브러리가 파이썬의 기본 동작을 변경해야 하는 극단적인 상황에서 사용될 수 있습니다. monkey patching덕분에 gevent는 ``socket``, ``ssl``, ``threading``, 그리고 ``select`` 과 같은 기본 라이브러리들에 있는 blocking system call들이 동시에 실행될 수 있도록 수정할 수 있습니다.
 
 예를 들어, Redis 파이썬 바인딩은 Redis 서버와 통신하기 위해 기본 tcp 소켓을 합니다. ``gevent.monkey.patch_all()``를 실행시키는 것 만으로 Redis 바인딩이 요청들을 동시에 실행될 수 있도록 스케쥴링 되도록 만들고 gevent 코드에서 동작하도록 만들 수 있습니다.
 
@@ -578,7 +577,7 @@ gevent.joinall([
 
 ## Queues
 
-Queue는 일반적인 ``put`` 과 ``get` 연산을 지원하지만 Greenlet 사이에서 안전하게 조작되는 것이 보장되는 순서를 가진 데이터들의 집합입니다.
+Queue는 일반적인 ``put`` 과 ``get`` 연산을 지원하지만 Greenlet 사이에서 안전하게 조작되는 것이 보장되는 순서를 가진 데이터들의 집합입니다.
 
 예를 들어 한 Greenlet이 queue에서 값 하나를 가져왔을 때, 해당 값이 다른 Greenlet에 의해서 동시에 접근되지 못하도록 보장합니다.
 
@@ -612,7 +611,7 @@ gevent.joinall([
 
 또한 Queue는 ``put``이나 ``get`` 연산 시 block 됩니다. 
 
-non-blocking 연산이 필요할 때는 block이 되지 않는 ``put_nowait``과 ``get_nowait`을 사용할 수 있습니다. 대신 연산이 불가능 할때는 ``gevent.queue.Empty`` 나 ``gevent.queue.Full`` 예외를 발생시킵니다.
+non-blocking 연산이 필요할 때는 block이 되지 않는 ``put_nowait``과 ``get_nowait``을 사용할 수 있습니다. 대신 연산이 불가능할 때는 ``gevent.queue.Empty`` 나 ``gevent.queue.Full`` 예외를 발생시킵니다.
 
 아래 코드는 상사가 3명의 작업자(steve, john, nancy)에게 동시에 일을 시키는데 Queue가 3개 이상의 요소를 담지 않도록 제한하는 예시입니다. 이 제한은 ``put``연산이 Queue에 남은 공간이 있을 때 까지 block 되어야 함을 의미합니다. 반대로 ``get`` 연산은 Queue에 요소가 없으면 block 되는데, 일정 시간이 지날 때 까지 요소가 들어오지 않으면 ``gevent.queue.Empty`` 예외를 발생시키면서 종료될 수 있도록 타임아웃 파라미터를 설정할 수 있습니다.
 
@@ -1012,7 +1011,7 @@ gevent.joinall([ping, pong])
 
 [ZeroMQ](http://www.zeromq.org/)의 개발자는 ZeroMQ를 다음과 같이 정의합니다: "a socket library that acts as a concurrency framework". ZeroMQ는 동시성을 가진 분산시스템을 만들기 위한 강력한 messaging layer입니다.
 
-ZeroMQ는 다양한 socket primitive들을 제공합니다. socket은 blocking 연산인 ``send``, ``recv` 함수를 제공합니다. 하지만 [Travis Cline](https://github.com/traviscline)가 만든 라이브러리를 사용하면 gevent.socket을 이용해 ZeroMQ socket에 non-blocking 방식으로 접근할 수 있습니다. 다음 명령어로 PyPi에서 gevent-zeromq를 설치할 수 있습니다: ``pip install
+ZeroMQ는 다양한 socket primitive들을 제공합니다. socket은 blocking 연산인 ``send``, ``recv`` 함수를 제공합니다. 하지만 [Travis Cline](http://github.com/traviscline)가 만든 라이브러리를 사용하면 gevent.socket을 이용해 ZeroMQ socket에 non-blocking 방식으로 접근할 수 있습니다. 다음 명령어로 PyPi에서 gevent-zeromq를 설치할 수 있습니다: ``pip install
 gevent-zeromq``
 
 [[[cog
